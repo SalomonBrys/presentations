@@ -111,6 +111,25 @@ It enables
 
 == What are reified types?
 
+They prevent type erasure.
+
+=== What is type erasure?
+
+[source,java]
+----
+// What YOU see in JAVA
+List<String> list = new ArrayList<String>();
+
+// What THE JVM sees in bytecode
+List<Object> list = new ArrayList<Object>();
+----
+
+Type genericity DOES NOT EXIST in the JVM!!!
+
+NOTE: Of course, Kotlin is also subject to type erasure.
+
+== What are reified types?
+
 [%step]
 * They can only exist within inline methods.
 * They allow to take action on a generic type...
