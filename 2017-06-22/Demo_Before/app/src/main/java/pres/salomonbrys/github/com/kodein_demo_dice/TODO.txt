@@ -1,0 +1,116 @@
+
+1. Add Kodein to Application
+    a. Make DiceApplication KodeinAware
+    b. Declare bindings
+        ==========================================
+        override val kodein: Kodein by Kodein.lazy {
+
+            // BUSINESS
+
+            bind<LuckProcessor>() with singleton { LuckProcessorImpl(instance()) }
+
+            bind<Dice>() with factory { sides: Int -> DiceImpl(sides, instance()) } // Multiton?
+
+
+            // UTILS
+
+            bind<Random>() with provider { SecureRandom() }
+
+            bind() from provider { MovingAverageCalculator() }
+
+
+            // PRESENTERS
+
+            bind<LuckPresenter>() with factory { view: LuckPresenter.View -> LuckPresenterImpl(view, instance()) }
+
+            bind<DicePresenter>() with factory { view: DicePresenter.View -> DicePresenterImpl(view, instance()) }
+        }
+        ==========================================
+    c. Remove the luck presenter static from the application
+
+2. Make the luck fragments use Kodein
+    a. Make LuckFragment KodeinInjected
+    b. Add the injector
+        ==========================================
+        override val injector = KodeinInjector()
+        ==========================================
+    c. Get the presenter from Kodein
+        ==========================================
+        private val presenter: LuckPresenter by injector.with<LuckPresenter.View>(this).instance()
+        ==========================================
+    d. Inject in onCreate
+        ==========================================
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            injector.inject(appKodein())
+        }
+        ==========================================
+
+3. Make the main activity a Kodein Activity
+    a. Make MainActivity KodeinAppCompatActivity instead of AppCompatActivity
+
+4. Make the dice fragment use Kodein
+    a. Make DiceFragment KodeinSupportFragment instead of Fragment
+    b. Get the presenter from Kodein
+        ==========================================
+        private val presenter: DicePresenter by with<DicePresenter.View>(this).instance()
+        ==========================================
+
+5. Modularize
+    a. Create the business module businessModule.kt in the business package
+        ==========================================
+        val businessModule = Kodein.Module {
+
+            bind<LuckProcessor>() with singleton { LuckProcessorImpl(instance()) }
+
+            bind<Dice>() with factory { sides: Int -> DiceImpl(sides, instance()) } // Multiton?
+
+        }
+        ==========================================
+    b. Create the presenter module presenterModule.kt in the ui.pres package
+        ==========================================
+        val presenterModule = Kodein.Module {
+
+            bind<LuckPresenter>() with factory { view: LuckPresenter.View -> LuckPresenterImpl(view, instance()) }
+
+            bind<DicePresenter>() with factory { view: DicePresenter.View -> DicePresenterImpl(view, instance()) }
+
+        }
+        ==========================================
+    c. Import those modules in the kodein bindings in DiceApplication
+        ==========================================
+        import(businessModule)
+        import(presenterModule)
+
+        bind<Random>() with provider { SecureRandom() }
+        ==========================================
+
+6. Errors
+    a. Remove the MovingAverageCalculator binding and see what happens
+    b. Have MovingAverageCalculator depends on LuckProcessor and see what happens
+    c. Try to declare Random twice and see what happens
+
+7. Tags
+    a. Defines a second random with the tag "unsafe"
+        ==========================================
+        bind<Random>(tag = "unsafe") with provider { Random() }
+        ==========================================
+    b. In businessModule, modify the Dice binding so that DiceImpl receives the unsafe random
+
+8. JX
+    a. Create a new Activity to demonstrate JX
+        ==========================================
+        @SuppressLint("Registered")
+        public class MyOtherActivity extends Activity {
+
+            @Inject
+            LuckProcessor luckProcessor;
+
+            @Override
+            protected void onCreate(@Nullable Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+                Jx.of(((DiceApplication) getApplication()).getKodein()).inject(this);
+            }
+        }
+        ==========================================

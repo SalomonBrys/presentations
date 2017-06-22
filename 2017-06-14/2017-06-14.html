@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Next level type inference: from sugar to magic</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/sky.css" id="theme"><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Next level type inference</h1><h2>from sugar to magic</h2></section><section><section id="_my_name_is" data-transition="zoom"><h2>My name is&#8230;&#8203;</h2><div class="paragraph"><p>Salomon BRYS</p></div><div class="ulist"><ul><li class="fragment"><p>Kotliner for 3 years</p></li><li class="fragment"><p>Author &amp; maintainer of Kodein</p></li></ul></div></section><section id="_i_work_at" data-background-image="DM.jpg" data-background-size="cover"><h2>I work at&#8230;&#8203;</h2>
+<div class="paragraph"><p><a href="http://www.dental-monitoring.com/">Dental Monitoring</a>.</p></div></section></section>
+<section><section id="_type_inference"><h2>Type inference</h2><div class="quoteblock"><blockquote><div class="paragraph"><p>The compiler&#8217;s ability to look at each method invocation and corresponding
+declaration to determine the type argument (or arguments) that make the
+invocation applicable.</p></div></blockquote><div class="attribution">&#8212; Java documentation</div></div></section><section id="_type_inference_2"><h2>Type inference</h2><div class="ulist"><ul><li class="fragment"><p>No explicit type&#8230;&#8203;</p></li><li class="fragment"><p>&#8230;&#8203;but no ambiguity.</p></li><li class="fragment"><p>= type safe!</p></li></ul></div></section></section>
+<section><section id="_java_has_no_type_inference"><h2>Java has no type inference&#8230;&#8203;</h2><div class="ulist"><ul><li class="fragment"><p>Wrong!</p></li></ul></div><aside class="notes"><div class="paragraph"><p>Show of hand who thinks it&#8217;s true.</p></div></aside></section><section id="_java_has_some_type_inference"><h2>Java has SOME type inference!</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Subject&lt;String&gt; subject = PublishSubject.create(); <b>(1)</b>
+//                                       ^^
+List&lt;String&gt; list = new ArrayList&lt;&gt;(); <b>(2)</b>
+//                               ^^
+Arrays.asList("a", "b", "c"); <b>(3)</b>
+//            ^^</code></pre></div></div>
+<div class="colist arabic"><ol><li><p>Inference from context</p></li><li><p>Inference from context (Java 7)</p></li><li><p>Inference from arguments</p></li></ol></div></section></section>
+<section><section id="_kotlin_type_inference_engine"><h2>Kotlin type inference engine</h2><div class="paragraph"><p>Demo time!</p></div></section><section id="_type_inference_is_a_sugar_tool"><h2>Type inference is a sugar tool</h2><div class="paragraph"><p>All it does is preventing cumbersome explicit typing.</p></div>
+<div class="ulist"><ul><li class="fragment"><p>Wrong!</p></li><li class="fragment"><p>Because <strong>reified types</strong>.</p></li></ul></div></section></section>
+<section><section id="_what_are_reified_types"><h2>What are reified types?</h2><div class="paragraph"><p>They can only exist within inline methods.</p></div></section><section id="_what_are_inline_methods"><h2>What are inline methods?</h2><div class="paragraph"><p>Methods that will be <em>forcibly</em> <strong>inlined</strong> at the call site.</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="kotlin language-kotlin">inline fun square(a: Int) = a * a
+
+println(square(42)) <b>(1)</b>
+println(42 * 42) <b>(2)</b></code></pre></div></div>
+<div class="paragraph"><p>(1) &amp; (2) are strictly equivalent.</p></div></section><section id="_inline_functions_with_lambdas"><h2>Inline functions with lambdas</h2><div class="paragraph"><p>It enables</p></div>
+<div class="ulist"><ul><li class="fragment"><p>Non local returns.</p></li><li class="fragment"><p>List / Iterable / Sequence manipulation.</p></li><li class="fragment"><p>Loads of cool stuff!</p></li></ul></div></section></section>
+<section><section id="_what_are_reified_types_2"><h2>What are reified types?</h2><div class="ulist"><ul><li class="fragment"><p>They can only exist within inline methods.</p></li><li class="fragment"><p>They allow to take action on a generic type&#8230;&#8203;</p></li><li class="fragment"><p>&#8230;&#8203;provided that this type is <strong>known at compile time</strong>.</p></li></ul></div></section><section id="_reified_types"><h2>Reified types</h2><div class="paragraph"><p>Demo time!</p></div></section></section>
+<section id="_reified_infered_types" data-background-image="tada.jpg" data-background-size="cover"><h2>Reified infered types</h2>
+<div class="paragraph"><p>The type argument can be infered!</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="kotlin language-kotlin">inline fun &lt;reified T&gt; getInstance(): T = ioc(T::class.java)
+//           ┌────────────────────────────────┘
+val network: Network = getInstance()</code></pre></div></div></section>
+<section><section id="_kodein"><div class="imageblock" style=""><img src="Kodein-logo.png" alt="KODEIN"></div><div class="ulist"><ul><li class="fragment"><p>&#8230;&#8203;is a Dependency Injection (IoC) container</p></li><li class="fragment"><p>&#8230;&#8203;makes heavy use of reified infered types</p></li><li class="fragment"><p>&#8230;&#8203;is developped and maintains by yours, truly</p></li><li class="fragment"><p>&#8230;&#8203;has just been released in version 4</p></li></ul></div></section><section id="_dependency_injection"><h2>Dependency Injection</h2><div class="paragraph"><p>Don&#8217;t call us, we&#8217;ll call you!</p></div>
+<div class="imageblock" style=""><img src="dependency-injection.png" alt="Dependency Injection"></div></section></section>
+<section><section id="_kodein_2"><div class="imageblock" style=""><img src="Kodein-logo.png" alt="KODEIN"></div><div class="paragraph"><p>Demo time!</p></div></section><section id="_by_the_way"><h2>By the way&#8230;&#8203;</h2><div class="paragraph"><p>Kodein is&#8230;&#8203;</p></div>
+<div class="ulist"><ul><li><p>&#8230;&#8203;compatible with Android</p></li><li><p>&#8230;&#8203;compatible with Javascript</p></li><li><p>&#8230;&#8203;widely used</p></li><li><p>&#8230;&#8203;a better choice than Dagger 2 :)</p></li></ul></div>
+<div class="paragraph"><p>&#8230;&#8203;but that&#8217;s not the point ;)</p></div></section><section id="_kodein_documentation"><div class="imageblock" style=""><img src="Kodein-logo.png" alt="KODEIN"></div>
+<div class="paragraph"><p><a href="https://salomonbrys.github.io/Kodein/" class="bare">https://salomonbrys.github.io/Kodein/</a></p></div></section></section>
+<section id="_conclusion"><h2>Conclusion</h2><div class="ulist"><ul><li class="fragment"><p>Type inference allows <strong>conciseness while keeping type safety</strong>.</p></li><li class="fragment"><p>Reified types allow to <strong>pass a type as argument</strong>.</p></li><li class="fragment"><p>Reified type inference allows to <strong>infer type arguments</strong>.</p></li></ul></div></section>
+<section id="_thank_you"><h2>Thank you!</h2></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: false,
+  // Push each slide change to the browser history
+  history: true,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'sky',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'slide',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>

@@ -1,0 +1,194 @@
+[transition=zoom, %notitle]
+= Next level type inference: from sugar to magic
+:source-highlighter: highlightjs
+:revealjs_theme: sky
+:revealjs_history: true
+
+
+== My name is...
+
+Salomon BRYS
+
+[%step]
+* Kotliner for 3 years
+* Author & maintainer of Kodein
+
+
+=== I work at...
+
+image::DM.jpg[background, size=cover]
+
+http://www.dental-monitoring.com/[Dental Monitoring].
+
+
+== Type inference
+
+[quote, Java documentation]
+____
+The compiler's ability to look at each method invocation and corresponding
+declaration to determine the type argument (or arguments) that make the
+invocation applicable.
+____
+
+
+=== Type inference
+
+[%step]
+* No explicit type...
+* ...but no ambiguity.
+* = type safe!
+
+
+== Java has no type inference...
+
+[%step]
+* Wrong!
+
+[NOTE.speaker]
+--
+Show of hand who thinks it's true.
+--
+
+
+=== Java has SOME type inference!
+
+[source,java]
+----
+Subject<String> subject = PublishSubject.create(); <1>
+//                                       ^^
+List<String> list = new ArrayList<>(); <2>
+//                               ^^
+Arrays.asList("a", "b", "c"); <3>
+//            ^^
+----
+<1> Inference from context
+<2> Inference from context (Java 7)
+<3> Inference from arguments
+
+
+== Kotlin type inference engine
+
+Demo time!
+
+
+=== Type inference is a sugar tool
+
+All it does is preventing cumbersome explicit typing.
+
+[%step]
+* Wrong!
+* Because *reified types*.
+
+
+== What are reified types?
+
+They can only exist within inline methods.
+
+
+=== What are inline methods?
+
+Methods that will be _forcibly_ *inlined* at the call site.
+
+[source,kotlin]
+----
+inline fun square(a: Int) = a * a
+
+println(square(42)) <1>
+println(42 * 42) <2>
+----
+
+(1) & (2) are strictly equivalent.
+
+
+=== Inline functions with lambdas
+
+It enables
+[%step]
+* Non local returns.
+* List / Iterable / Sequence manipulation.
+* Loads of cool stuff!
+
+
+== What are reified types?
+
+[%step]
+* They can only exist within inline methods.
+* They allow to take action on a generic type...
+* ...provided that this type is *known at compile time*.
+
+
+=== Reified types
+
+Demo time!
+
+
+== Reified infered types
+
+image::tada.jpg[background, size=cover]
+
+The type argument can be infered!
+
+[source,kotlin]
+----
+inline fun <reified T> getInstance(): T = ioc(T::class.java)
+//           ┌────────────────────────────────┘
+val network: Network = getInstance()
+----
+
+
+[options="notitle"]
+== Kodein
+
+image::Kodein-logo.png[KODEIN]
+
+[%step]
+* ...is a Dependency Injection (IoC) container
+* ...makes heavy use of reified infered types
+* ...is developped and maintains by yours, truly
+* ...has just been released in version 4
+
+
+=== Dependency Injection
+
+Don't call us, we'll call you!
+
+image::dependency-injection.png[Dependency Injection]
+
+
+[options="notitle"]
+== Kodein
+
+image::Kodein-logo.png[KODEIN]
+
+Demo time!
+
+
+=== By the way...
+
+Kodein is...
+
+* ...compatible with Android
+* ...compatible with Javascript
+* ...widely used
+* ...a better choice than Dagger 2 :)
+
+...but that's not the point ;)
+
+
+[options="notitle"]
+=== Kodein Documentation
+
+image::Kodein-logo.png[KODEIN]
+
+https://salomonbrys.github.io/Kodein/
+
+
+== Conclusion
+
+[%step]
+* Type inference allows *conciseness while keeping type safety*.
+* Reified types allow to *pass a type as argument*.
+* Reified type inference allows to *infer type arguments*.
+
+
+== Thank you!

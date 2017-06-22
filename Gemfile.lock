@@ -1,0 +1,34 @@
+GIT
+  remote: git://github.com/asciidoctor/asciidoctor-reveal.js.git
+  revision: 9667f5c5d926b3be48361d6d6413d3896954894c
+  specs:
+    asciidoctor-revealjs (1.0.3.pre.dev)
+      asciidoctor (~> 1.5.4)
+      slim (~> 3.0.6)
+      thread_safe (~> 0.3.5)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    asciidoctor (1.5.5)
+    coderay (1.1.1)
+    multi_json (1.12.1)
+    pygments.rb (1.1.2)
+      multi_json (>= 1.0.0)
+    slim (3.0.8)
+      temple (>= 0.7.6, < 0.9)
+      tilt (>= 1.3.3, < 2.1)
+    temple (0.8.0)
+    thread_safe (0.3.6)
+    tilt (2.0.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  asciidoctor-revealjs!
+  coderay
+  pygments.rb
+
+BUNDLED WITH
+   1.11.2
