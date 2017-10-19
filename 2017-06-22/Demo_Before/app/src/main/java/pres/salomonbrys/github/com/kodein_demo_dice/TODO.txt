@@ -40,10 +40,10 @@
         ==========================================
     d. Inject in onCreate
         ==========================================
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            injector.inject(appKodein())
-        }
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                injector.inject(appKodein())
+            }
         ==========================================
 
 3. Make the main activity a Kodein Activity

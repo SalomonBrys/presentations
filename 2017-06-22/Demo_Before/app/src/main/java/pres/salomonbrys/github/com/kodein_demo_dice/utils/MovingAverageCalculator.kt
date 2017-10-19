@@ -1,6 +1,6 @@
 package pres.salomonbrys.github.com.kodein_demo_dice.utils
 
-class MovingAverageCalculator {
+class MovingAverageCalculator() {
 
     var average = 0
         private set
