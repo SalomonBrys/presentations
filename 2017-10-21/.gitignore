@@ -1,0 +1,14 @@
+# INTELLIJ
+.idea/
+*.ipr
+*.iml
+
+# GRADLE
+.gradle
+build/
+out/
+gradle.properties
+.gradletasknamecache
+
+# JS
+node_modules/

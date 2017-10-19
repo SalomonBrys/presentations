@@ -1,0 +1,70 @@
+buildscript {
+    ext.kotlin_version = '1.1.51'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        //noinspection DifferentKotlinGradleVersion
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'org.kodein.mobilization'
+version '1.0'
+
+apply plugin: 'kotlin2js'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.webjars.bower:reveal.js:3.5.0"
+    compile 'org.webjars.bower:highlightjs:9.12.0'
+}
+
+task assembleWeb(type: Sync) {
+    configurations.compile.each { File file ->
+        def extensions = [".html", ".js", ".css", ".jpg", ".png", ".eot", ".ttf", ".otf", ".woff"]
+
+        from(zipTree(file.absolutePath), {
+            includeEmptyDirs = false
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                !path.startsWith("META-INF/") && extensions.any { path.endsWith(it) }
+            }
+        })
+
+        from(zipTree(file.absolutePath), {
+            includeEmptyDirs = false
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.startsWith("META-INF/resources/") && extensions.any { path.endsWith(it) }
+            }
+
+            eachFile {
+                path sourcePath.substring("META-INF/resources/".length())
+            }
+        })
+    }
+
+    from compileKotlin2Js.destinationDir
+    into "${projectDir}/web/out/lib"
+
+    dependsOn classes
+}
+
+assemble.dependsOn assembleWeb
+
+task cleanWeb(type: Delete) {
+    delete "${projectDir}/web/out/"
+}
+
+clean.dependsOn cleanWeb
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${projectDir}/web/out/kodein-mobilization.js"
+    kotlinOptions.sourceMap = true
+}

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kodein at Mobilization</title>
+
+    <link rel="stylesheet" href="out/lib/webjars/reveal.js/3.5.0/css/reveal.css">
+    <link rel="stylesheet" href="out/lib/webjars/reveal.js/3.5.0/css/theme/sky.css">
+    <link rel="stylesheet" href="out/lib/webjars/highlightjs/9.12.0/styles/github.css">
+
+    <style type="text/css">
+        .hljs .fragment.highlight-current-blue.current-fragment span {
+            color: #1b91ff;
+            transition: all .2s ease;
+        }
+
+        @keyframes stampAnimation {
+            0%   { transform: scale(3, 3); }
+            100% { transform: scale(1, 1); }
+        }
+
+        .fragment.stamp {
+            display: inline-block;
+            transition: all .5s cubic-bezier(.7, .2, 1, .75) !important;
+        }
+        .fragment.stamp.visible {
+            animation: stampAnimation .5s cubic-bezier(.7, .2, 1, .75);
+        }
+
+        @keyframes flickerAnimation {
+            0%   { opacity:1; }
+            50%  { opacity:0; }
+            100% { opacity:1; }
+        }
+        .flicker {
+            animation: flickerAnimation 1s infinite;
+            color: red;
+        }
+
+        code.inline {
+            border: solid black 1px;
+            background: white 50%;
+            padding: 2px 5px;
+            font-size: 75%;
+        }
+    </style>
+
+    <link rel="icon" href="imgs/favicon.png" />
+
+
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section>
+                <h2>Kotlin Dependency Injection</h2>
+            </section>
+
+            <section>
+                <img src="imgs/Avatar.jpg" style="width: 121px; border-radius: 100%; margin-top: -100px" />
+                <h3>Salomon BRYS</h3>
+                <p><a href="https://github.com/salomonbrys">github.com/salomonbrys</a></p>
+
+                <aside class="notes"><code>
+                    I'm French<br />
+                    My work is on <b>Github</b><br />
+                    Creator, maintainer & main contributor of <b>Kodein</b>
+                </code></aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Dependency Injection</h2>
+                <q>
+                    Dependency injection separates the creation of a client's dependencies from the
+                    client's behavior, which allows program designs to be loosely coupled and to
+                    follow the dependency inversion and single responsibility principles.<br />
+                    <small>-- Wikipedia</small>
+                </q>
+
+                <aside class="notes">
+                    Separation of reponsibilities<br />
+                    Testability
+                </aside>
+            </section>
+            
+            <section>
+                <img src="imgs/dependency-injection.png"><br />
+                <small><i>Source: Microsoft</i></small>
+
+                <aside class="notes">
+                    Kodein = builder
+                </aside>
+            </section>
+
+            <section>
+                <h2>What can you inject?</h2>
+
+                <ul>
+                    <li class="fragment fade-up">Business managers</li>
+                    <li class="fragment fade-up">Presenters, Controllers, ViewModels</li>
+                    <li class="fragment fade-up">Repositories</li>
+                    <li class="fragment fade-up">OS services</li>
+                    <li class="fragment fade-up">Anything that can be abstracted! <span class="fragment">(or not)</span></li>
+                </ul>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <img src="imgs/but-why.gif">
+                <p>You know, there's <span class="fragment fade-down" style="display: inline-block" data-fragment-index="1">Dagger!</span></p>
+                <p class="fragment" data-fragment-index="1"><small><i>Amazing piece of tech, btw ;)</i></small></p>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section data-background-image="imgs/kotlin.jpg">
+                <h2 style="margin-top: -200px">Because...</h2>
+
+                <aside class="notes">
+                    Revolution<br />
+                    Tools
+                </aside>
+            </section>
+        </section>
+
+        <section>
+           <h2>DI in <span class="fragment highlight-blue" data-fragment-index="7">Kotlin</span>:</h2>
+           <ul>
+               <li class="fragment fade-up" data-fragment-index="1"><span class="fragment highlight-blue" data-fragment-index="7">Semantic</span> (simple declarative DSL).</li>
+               <li class="fragment fade-up" data-fragment-index="2"><span class="fragment highlight-blue" data-fragment-index="7">Idiomatic</span> (best use of the Kotlin language)</li>
+               <li class="fragment fade-up" data-fragment-index="3"><span class="fragment highlight-blue" data-fragment-index="7">Easy</span> (to use & bootstrap).</li>
+               <li class="fragment fade-up" data-fragment-index="4">Android friendly (duh).</li>
+               <li class="fragment fade-up" data-fragment-index="5">Java friendly (for legacy code).</li>
+               <li class="fragment fade-up" data-fragment-index="6"><span class="fragment highlight-blue" data-fragment-index="7">iOS friendly</span> (via Kotlin-Native).</li>
+           </ul>
+
+            <aside class="notes">
+                <b>Goals</b>
+            </aside>
+        </section>
+
+        <section data-background-image="imgs/tada.jpg" data-transition="zoom">
+            <img src="imgs/Kodein-logo.png" />
+
+            <aside class="notes">
+                Tadaaa!!!
+            </aside>
+        </section>
+
+        <section data-background-iframe="https://salomonbrys.github.io/Kodein">
+            <aside class="notes">
+                Full featured & documented
+            </aside>
+        </section>
+
+        <section>
+            <section>
+                <h2>A bit of <img src="imgs/Kotlin-text.png" style="height: 65px; border: 0; margin: 0; box-shadow: none;">...</h2>
+                <p>...to understand the magic ;)</p>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h2>Infix functions</h2>
+
+                <pre><code  class="kotlin" data-trim data-noescape>
+                    <span class="fragment" data-fragment-index="1"><b>infix</b></span> fun User.register(e: Event): DSL
+                    <span class="fragment" data-fragment-index="1"><b>infix</b></span> fun DSL.at(t: Time)
+
+                          user<span class="fragment fade-out" data-fragment-index="1">.</span>register<span class="fragment fade-out" data-fragment-index="1">(</span>event<span class="fragment fade-out" data-fragment-index="1">).</span>at<span class="fragment fade-out" data-fragment-index="1">(</span>noon<span class="fragment fade-out" data-fragment-index="1">)</span> <span class="fragment" data-fragment-index="1">// Infix!</span>
+
+                          <i class="fragment" data-fragment-index="2">user.register(event)</i><i class="fragment" data-fragment-index="3">.at(noon)</i>
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h2>Reified generics</h2>
+
+                <pre><code  class="kotlin" data-trim data-noescape>
+                    <span class="fragment" data-fragment-index="1"><b>inline</b></span> fun &lt;<span class="fragment" data-fragment-index="1"><b>reified</b></span> T&gt; instance(): T =
+                            container.getInstance(T::class.java)
+                                                  <span class="fragment fade-out" data-fragment-index="1" style="color: red;">^^^^^^^^^^^^^</span>
+                    <span class="fragment" data-fragment-index="2">val m1 = instance&lt;Manager&gt;()</span>
+
+                    <span class="fragment" data-fragment-index="3">val m2: Manager = instance() // Type inference!</span>
+                </code></pre>
+
+                <aside class="notes">
+                    Look at inline!
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <img src="imgs/impatient.gif" width="600px" />
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+        <section>
+            <section>
+                <h2>Semantic</h2>
+                <p class="fragment"><i>simple declarative binding DSL</i></p>
+
+                <pre class="fragment"><code class="kotlin" data-trim data-noescape>
+                    val kodein = Kodein {
+                        <span class="fragment">bind&lt;DB&gt;() with singleton { DBImpl() }</span> <span class="fragment">// Infix functions!</span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                    Sentence: Bind the type DB to a Singleton containing a DB Implementation
+                </aside>
+            </section>
+
+            <section>
+                <h3>Simple bindings</h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    // Instance:
+                    <span class="fragment">bind&lt;DB&gt;() with instance(db)</span>
+
+                    // Provider:
+                    <span class="fragment">bind&lt;Random&gt;() with provider <span class="fragment highlight-current-blue">{ SecureRandom() }</span></span>
+
+                    // Singleton:
+                    <span class="fragment">bind&lt;Net&gt;() with singleton <span class="fragment highlight-current-blue">{ NetImpl() }</span></span>
+
+                </code></pre>
+
+                <aside class="notes">
+                    Lambda!
+                </aside>
+            </section>
+
+            <section>
+                <h3>Factory bindings</h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    // Factory:
+                    <span class="fragment">bind&lt;Dice&gt;() with factory { sides: Int -> DiceImpl(sides) }</span>
+
+                    // Multiton:
+                    <span class="fragment">bind&lt;Prefs&gt;() with multiton { root: String -> PrefsImpl(root) }</span>
+
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>Transitive dependencies</h3>
+
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class Repo(val db: DB, val infos: AppInfos)
+                </code></pre>
+
+                <pre><code class="kotlin" data-trim data-noescape>
+                    val kodein = Kodein {
+                      bind&lt;DB&gt;() with singleton { DBImpl() }
+                      bind&lt;appInfos&gt;() with instance(infos)
+
+                      <span class="fragment highlight-current-blue" data-fragment-index="1">bind() from</span> singleton { Repo(<span class="fragment" data-fragment-index="2"><b>instance()</b></span>, <span class="fragment" data-fragment-index="2"><b>instance()</b></span>) }
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                    New syntax: Bind from
+                </aside>
+            </section>
+
+            <section>
+                <h3>Modules</h3>
+
+                <pre><code class="kotlin" data-trim data-noescape>
+                    val api<span class="fragment" data-fragment-index="1">Module</span> = Kodein<span class="fragment" data-fragment-index="1"><b>.Module</b></span> {
+                        bind&lt;Whatever&gt;() with singleton { WhateverImpl(instance()) }
+                        // ...
+                    }
+                </code></pre>
+
+                <pre class="fragment"><code class="kotlin" data-trim data-noescape>
+                    val kodein = Kodein {
+                        // Import API module
+                        <span class="fragment"><b>import(apiModule)</b></span>
+
+                        <span class="fragment">// ...</span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>And more...</h3>
+                <ul>
+                    <li>Tagged bindings</li>
+                    <li>Constants</li>
+                    <li>Eager Singletons</li>
+                    <li>Soft/weak singletons</li>
+                    <li class="fragment grow">Android niceties</li>
+                    <li>Custom Scopes</li>
+                </ul>
+
+                <aside class="notes">
+                    Wait, what?
+                </aside>
+            </section>
+
+            <section>
+                <!--<img src="imgs/Andy.png" style="border: none; box-shadow: none;" />-->
+
+                <pre><code class="kotlin" data-trim data-noescape style="background: #f8f8f8 url('imgs/Andy-bg.png') no-repeat center;">
+                    class MyApplication : Application, <span class="fragment highlight-current-blue">KodeinAware</span> {
+                        override val kodein = Kodein.lazy {
+                            <span class="fragment highlight-current-blue">import(autoAndroidModule(this@MyApplication))</span>
+                            // Bindings...
+                        }
+
+                        <span style="position: relative">override fun onCreate() {
+                            <span class="fragment highlight-blue">registerActivityLifecycleCallbacks(
+                                androidActivityScope.lifecycleManager
+                            )</span> <b class="fragment stamp" style="position: absolute; color: red; left: 200px; top: 35px; font-size: 63px;"><span style="display: inline-block; transform: rotate(-15deg);">Optional!</span></b>
+                        }</span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                    KodeinAware<br />
+                    Import<br />
+                    Register... optional!
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Idiomatic</h2>
+                <p class="fragment"><i>best use of the Kotlin language</i></p>
+
+                <pre class="fragment"><code class="kotlin" data-trim data-noescape>
+                    class MyManager(val kodein: Kodein) {
+                        val db: DB = <span class="fragment">kodein.<b>instance()</b></span> <span class="fragment">// Infered reified generics!</span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>Retrieval</h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class MyManager(val kodein: Kodein) {
+                        // Instance:
+                        val db: DB = <span class="fragment">kodein.<b>instance()</b></span>
+
+                        // Provider:
+                        val getRandom: () -> Random = <span class="fragment">kodein.<b>provider()</b></span>
+
+                        // Factory:
+                        val getPrefs: (String) -> Prefs = <span class="fragment">kodein.<b>factory()</b></span>
+
+                        // Currying:
+                        val appPrefs: Prefs = <span class="fragment"><b>kodein.with("app").instance()</b></span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <img src="imgs/aware.gif" width="480">
+                <p>Are you <span class="fragment">Kodein</span>Aware?</p>
+
+                <pre class="fragment"><code class="kotlin" data-trim data-noescape>
+                    interface KodeinAware {
+                        val kodein: Kodein
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>KodeinAware</h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class MyManager(<span class="fragment" data-fragment-index="2">override</span> val kodein: Kodein) <span class="fragment" data-fragment-index="1">: <b>KodeinAware</b></span> {
+                        // Instance:
+                        val db: DB = <span class="fragment fade-out" data-fragment-index="3">kodein.</span><b>instance()</b>
+
+                        // Provider:
+                        val getRandom: () -> Random = <span class="fragment fade-out" data-fragment-index="3">kodein.</span><b>provider()</b>
+
+                        // Factory:
+                        val getPrefs: (String) -> Prefs = <span class="fragment fade-out" data-fragment-index="3">kodein.</span><b>factory()</b>
+
+                        // Currying:
+                        val appPrefs: Prefs = <span class="fragment fade-out" data-fragment-index="3">kodein.</span><b>with("app").instance()</b>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class LoggerImpl(val from: Class<*>) : Logger { /* ... */ }
+
+                    <span class="fragment" data-fragment-index="1">val kodein = Kodein {
+                        bind&lt;Logger&gt;() with
+                                factory { from: Class<*> -> LoggerImpl(from) }
+                    }</span>
+
+                    <span class="fragment" data-fragment-index="3">fun KodeinAware.loggerInstance() =
+                            with(javaClass).instance&lt;Logger&gt;()</span>
+                </code></pre>
+                &nbsp;
+                <pre class="fragment" data-fragment-index="2"><code class="kotlin" data-trim data-noescape>
+                    class MyManager(override val kodein: Kodein) : KodeinAware {
+                        private val log = <span style="position: relative"><b><span style="position: absolute; left: 0" class="fragment fade-out" data-fragment-index="4">with(javaClass).instance&lt;Logger&gt;()</span><span style="position: absolute; left: 0" class="fragment fade-in" data-fragment-index="4">loggerInstance()</span></b></span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Being lazy in Android</h2>
+                <p><small>Bad pun, but intended!</small></p>
+
+                <q class="fragment">
+                    The entire lifetime of an [activity | fragment | component] starts at the first call to <b>onCreate</b><br />
+                    <small>-- The Android documentation</small>
+                </q>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>Lazy Activity with Kodein</h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class MyActivity : Activity(),     KodeinAware {
+
+                        override val kodein =              <span class="fragment" data-fragment-index="1"><b>appKodein()</b></span>
+                                                           <span class="fragment" data-fragment-index="2" style="color: red">^^^^^^^^^^^</span>
+                        val db: DB =  instance()
+                                      <span class="fragment" data-fragment-index="2" style="color: red">^^^^^^^^^^</span>
+                    }
+                </code></pre>
+
+                <p class="fragment" data-fragment-index="2">Init happens before onCreate!</p>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <table>
+                    <tr>
+                        <th>Version</th>
+                        <th><span class="fragment" data-fragment-index="1">Status</span></th>
+                        <th><span class="fragment" data-fragment-index="2">Retrieval<br /><small>by default</small></span></th>
+                        <th><span class="fragment" data-fragment-index="3">Android</span></th>
+                    </tr>
+                    <tr>
+                        <td>Kodein <b>4</b></td>
+                        <td><span class="fragment" data-fragment-index="1">Released</span></td>
+                        <td><span class="fragment" data-fragment-index="2"><b>Direct</b></span></td>
+                        <td><span class="fragment" data-fragment-index="3">Easy :)</span></td>
+                    </tr>
+                    <tr>
+                        <td>Kodein <b>5</b></td>
+                        <td><span class="fragment" data-fragment-index="1"><i>In progress</i></span></td>
+                        <td><span class="fragment" data-fragment-index="2"><b>Lazy</b></span></td>
+                        <td><span class="fragment" data-fragment-index="3">Easier :D</span></td>
+                    </tr>
+                </table>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>Lazy Activity with Kodein <span class="fragment" data-fragment-index="1"><b>4</b></span></h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class MyActivity : Activity(), <span class="fragment" data-fragment-index="2"><b>Lazy</b></span>KodeinAware {
+
+                        override val kodein = <span class="fragment" data-fragment-index="3"><b>LazyKodein {</b></span> appKodein() <span class="fragment" data-fragment-index="3"><b>}</b></span>
+                                                           <span class="fragment fade-out" data-fragment-index="2" style="color: red">^^^^^^^^^^^</span>
+                        val db: DB<span style="position: relative"><span class="fragment fade-out" data-fragment-index="4" style="position: absolute; left: 0"> = </span><span class="fragment fade-in" data-fragment-index="4" style="position: absolute; left: 0"><b> by</b></span></span>    instance()
+                                      <span class="fragment fade-out" data-fragment-index="2" style="color: red">^^^^^^^^^^</span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Being injected in Android</h2>
+                <p><small>Sorry, I couldn't find a <i>good</i> pun :(</small></p>
+
+                <p class="fragment">Retrieve all dependencies at once when needed.</p>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>Injected Activity with Kodein</h3>
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class MyActivity : Activity(), Kodein<span style="position: relative"><span style="position: absolute; left: 0" class="fragment fade-out" data-fragment-index="1">Aware</span><span style="position: absolute; left: 0" class="fragment fade-in" data-fragment-index="1"><b>Injected</b></span></span>         {
+
+                        override val <span style="position: relative"><span style="position: absolute; left: 0" class="fragment fade-out" data-fragment-index="2">kodein = appKodein()</span><span style="position: absolute; left: 0" class="fragment fade-in" data-fragment-index="2"><b><span class="hljs-variable">injector</span> = KodeinInjector()</b></span></span>
+
+                        <span class="fragment" data-fragment-index="5">// Will crash if accessed before onCreate!</span>
+                        val db: DB<span style="position: relative"><span class="fragment fade-out" data-fragment-index="3" style="position: absolute; left: 0"> = </span><span class="fragment fade-in" data-fragment-index="3" style="position: absolute; left: 0"><b> by</b></span></span>    instance()
+
+
+                        <span class="fragment" data-fragment-index="4">override fun onCreate(savedInstanceState: Bundle?) {
+                           <b>inject(appKodein())</b>
+                        }</span>
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section data-background-image="imgs/Android-bg.png">
+            <section>
+                <h2>Android Niceties</h2>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>OS Services</h3>
+
+                <pre><code class="kotlin" data-trim data-noescape>
+                    class MyActivity : Activity(), KodeinInjected {
+                        override val injector = KodeinInjector()
+
+                        <span style="position: relative">val vibrator: Vibrator by <span class="fragment fade-out" data-fragment-index="1" style="position: absolute; left: 0">                          lazy {
+                        activity.getSystemService(Context.VIBRATOR_SERVICE)
+                        as Vibrator
+                    }</span><span class="fragment fade-in" data-fragment-index="1" style="position: absolute; left: 0">                          <b>instance()</b></span></span>
+
+
+
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h3>Android sub scopes</h3>
+
+                <div style="position: relative">
+                    <pre><code class="kotlin" data-trim data-noescape>
+                        class MyActivity : KodeinActivity(), <span class="fragment highlight-current-blue" data-fragment-index="1">Callbacks</span> {
+                            override fun provideOverridingModule() = Kodein.Module {
+                            bind&lt;<span class="fragment highlight-current-blue" data-fragment-index="1">Callbacks</span>&gt;() with instance(this@MyActivity)
+                            }
+                        }
+                    </code></pre>
+
+                    <pre class="fragment"><code class="kotlin" data-trim data-noescape>
+                        class MyFragment : KodeinFragment() {
+                            val cb: Callbacks by instance()
+                        }
+                    </code></pre>
+
+                    <b class="stamp fragment" style="position: absolute; color: green; left: 15px; top: 80px; font-size: 63px;"><span style="display: inline-block; transform: rotate(15deg)">Interface based API available!</span></b>
+                    <b class="fragment stamp" style="position: absolute; color: red; left: 320px; top: 80px; font-size: 84px;"><span style="display: inline-block; transform: rotate(-15deg)">Optional!</span></b>
+                </div>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2 class="flicker" style="color: red">Disclaimer!</h2>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <h2>Kodein <span class="fragment stamp" data-fragment-index="1"><b>5.0</b></span>!</h2>
+
+                <div style="position: relative; font-size: 40px">
+                    <ul>
+                        <li class="fragment fade-up" data-fragment-index="2">
+                            <b>Lazy</b> by default <span class="fragment" data-fragment-index="3">⇒ <code class="inline">by</code> instead of <code class="inline"> =</code> everywhere!</span>
+                        </li>
+                        <li class="fragment fade-up" data-fragment-index="4">
+                            <b>Receiver</b> aware <span class="fragment" data-fragment-index="5">⇒ no android sub-scopes</span>
+                        </li>
+                        <li class="fragment fade-up" data-fragment-index="6">
+                            <b>External source</b> <span class="fragment" data-fragment-index="7">⇒ delegation to other DI</span>
+                        </li>
+                        <li class="fragment fade-up" data-fragment-index="9">
+                            <b>No more</b> curry <span class="fragment" data-fragment-index="10">⇒ <code class="inline">instance(arg = T)</code><br />
+                            <span style="padding-left: 335px">instead of <code class="inline">with(T).instance()</code></span></span>
+                        </li>
+                    </ul>
+                    <div style="position: absolute; top: 15px; right: -150px" class="fragment" data-fragment-index="8">
+                        <span style="display: inline-block; font-size: 120px; vertical-align: middle">}</span> <span style="display: inline-block; transform: rotate(-90deg); margin-left: -80px">TornadoFX</span>
+                    </div>
+                </div>
+
+                <aside class="notes">
+                </aside>
+            </section>
+
+            <section>
+                <img src="imgs/who-knows.gif" />
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <img src="imgs/android-vs-ios.gif" />
+
+                <aside class="notes">
+                </aside>
+            </section>
+            <section>
+                <p>Kodein 4.0 <b> <span style="color: green">is already</span></b> compatible with <b>Javascript!</b></p>
+                <br />
+                <div style="position: relative">
+                    <p>Kodein 5.x <b> <span style="color: orange">will be</span></b> compatible with <b>Native!</b></p>
+                    <div style="padding-left: 650px; text-align: left">
+                        <span class="fragment">⇒ Raspberry pi!</span><br />
+                        <span class="fragment">⇒ iOS...</span>
+                    </div>
+                    <b class="fragment stamp" style="position: absolute; color: orange; left: 150px; top: 0px; font-size: 63px;"><span style="display: inline-block; transform: rotate(-15deg)">As soon as possible!</span></b>
+                </div>
+
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+
+        <section>
+            <h2>Thank you!</h2>
+            <img src="imgs/Kodein-logo.png" />
+
+            <aside class="notes">
+            </aside>
+        </section>
+
+    </div>
+</div>
+
+
+<script type="text/javascript" src="out/lib/webjars/headjs/1.0.3/dist/1.0.0/head.js"></script>
+<script type="text/javascript" src="out/lib/webjars/reveal.js/3.5.0/js/reveal.js"></script>
+<script type="text/javascript" src="out/lib/kotlin.js"></script>
+<script type="text/javascript" src="out/kodein-mobilization.js"></script>
+</body>
+</html>
