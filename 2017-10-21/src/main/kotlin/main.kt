@@ -32,6 +32,7 @@ fun main(args: Array<String>) {
 
     Reveal.initialize(RevealInit(
             slideNumber = true,
+//            showNotes = true,
             history = true,
             dependencies = arrayOf(
                     RevealInit.Dependency("$revealRoot/plugin/notes/notes.js"),

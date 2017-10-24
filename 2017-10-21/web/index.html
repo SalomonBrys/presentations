@@ -56,10 +56,12 @@
         <section>
             <section>
                 <h2>Kotlin Dependency Injection</h2>
+                <br />
+                <p><b><a href="https://kodein.org">kodein.org</a></b></p>
             </section>
 
             <section>
-                <img src="imgs/Avatar.jpg" style="width: 121px; border-radius: 100%; margin-top: -100px" />
+                <img src="imgs/Avatar.jpg" style="width: 121px; border-radius: 100%; margin-top: -100px; box-shadow: 3px 3px 20px #555;" />
                 <h3>Salomon BRYS</h3>
                 <p><a href="https://github.com/salomonbrys">github.com/salomonbrys</a></p>
 
@@ -184,6 +186,7 @@
                 </code></pre>
 
                 <aside class="notes">
+                    DSL
                 </aside>
             </section>
 
@@ -200,6 +203,7 @@
                 </code></pre>
 
                 <aside class="notes">
+                    Type erasure<br />
                     Look at inline!
                 </aside>
             </section>
@@ -224,7 +228,7 @@
                 </code></pre>
 
                 <aside class="notes">
-                    Sentence: Bind the type DB to a Singleton containing a DB Implementation
+                    Bind the type DB to a Singleton containing a DB Implementation
                 </aside>
             </section>
 
@@ -243,7 +247,9 @@
                 </code></pre>
 
                 <aside class="notes">
-                    Lambda!
+                    Instance<br />
+                    Provider, lambda!<br />
+                    Singleton, lambda!<br />
                 </aside>
             </section>
 
@@ -259,6 +265,8 @@
                 </code></pre>
 
                 <aside class="notes">
+                    Factory<br />
+                    Multiton<br />
                 </aside>
             </section>
 
@@ -303,6 +311,23 @@
                 </code></pre>
 
                 <aside class="notes">
+                    Separation of responsabilities<br />
+                    Readability
+                </aside>
+            </section>
+
+            <section>
+                <h3>Test Modules</h3>
+
+                <pre><code class="kotlin" data-trim data-noescape>
+                    val testModule = Kodein.Module {
+                        bind&lt;Whatever&gt;(<span class="fragment"><b>override = true</b></span>)
+                                with singleton { WhateverImpl(instance()) }
+                    }
+                </code></pre>
+
+                <aside class="notes">
+                    Override: not the only method!
                 </aside>
             </section>
 
@@ -310,7 +335,7 @@
                 <h3>And more...</h3>
                 <ul>
                     <li>Tagged bindings</li>
-                    <li>Constants</li>
+                    <li>Overrides (for testability)</li>
                     <li>Eager Singletons</li>
                     <li>Soft/weak singletons</li>
                     <li class="fragment grow">Android niceties</li>
@@ -326,8 +351,8 @@
                 <!--<img src="imgs/Andy.png" style="border: none; box-shadow: none;" />-->
 
                 <pre><code class="kotlin" data-trim data-noescape style="background: #f8f8f8 url('imgs/Andy-bg.png') no-repeat center;">
-                    class MyApplication : Application, <span class="fragment highlight-current-blue">KodeinAware</span> {
-                        override val kodein = Kodein.lazy {
+                    class MyApplication : Application(), <span class="fragment highlight-current-blue">KodeinAware</span> {
+                        override val kodein = <span class="fragment highlight-current-blue">Kodein.lazy</span> {
                             <span class="fragment highlight-current-blue">import(autoAndroidModule(this@MyApplication))</span>
                             // Bindings...
                         }
@@ -396,6 +421,7 @@
                 </code></pre>
 
                 <aside class="notes">
+                    Joke for french people.
                 </aside>
             </section>
 
@@ -441,6 +467,7 @@
                 </code></pre>
 
                 <aside class="notes">
+                    Cool trick
                 </aside>
             </section>
         </section>
@@ -474,6 +501,8 @@
                 <p class="fragment" data-fragment-index="2">Init happens before onCreate!</p>
 
                 <aside class="notes">
+                    That fails.<br />
+                    Before filling the blanks...
                 </aside>
             </section>
 
@@ -589,7 +618,7 @@
                     <pre><code class="kotlin" data-trim data-noescape>
                         class MyActivity : KodeinActivity(), <span class="fragment highlight-current-blue" data-fragment-index="1">Callbacks</span> {
                             override fun provideOverridingModule() = Kodein.Module {
-                            bind&lt;<span class="fragment highlight-current-blue" data-fragment-index="1">Callbacks</span>&gt;() with instance(this@MyActivity)
+                                bind&lt;<span class="fragment highlight-current-blue" data-fragment-index="1">Callbacks</span>&gt;() with instance(this@MyActivity)
                             }
                         }
                     </code></pre>
@@ -605,6 +634,7 @@
                 </div>
 
                 <aside class="notes">
+                    Mention Eliezer
                 </aside>
             </section>
         </section>
@@ -642,6 +672,7 @@
                 </div>
 
                 <aside class="notes">
+                    So... when will it be released?
                 </aside>
             </section>
 
@@ -680,6 +711,7 @@
         <section>
             <h2>Thank you!</h2>
             <img src="imgs/Kodein-logo.png" />
+            <b><a href="https://kodein.org">kodein.org</a></b>
 
             <aside class="notes">
             </aside>
