@@ -8,3 +8,5 @@
     - [Slides](https://salomonbrys.github.io/presentations/2017-10-21/web/index.html)
 * 2017-10-23: **Kotlin coroutines and their usage in Android** at the Kotlin Paris Meetup
     - [Projects](https://github.com/SalomonBrys/presentations/tree/gh-pages/2017-10-23)
+* 2018-02-15: **Be In, Learn Kotlin!** at the Chti'JUG
+    - [Slides](https://salomonbrys.github.io/presentations/2018-02-15/web/index.html)

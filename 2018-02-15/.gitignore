@@ -1,0 +1,10 @@
+# INTELLIJ
+.idea/
+*.ipr
+*.iml
+
+# GRADLE
+.gradle
+build/
+gradle.properties
+.gradletasknamecache

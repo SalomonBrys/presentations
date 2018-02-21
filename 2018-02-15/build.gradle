@@ -1,0 +1,71 @@
+buildscript {
+    ext.kotlin_version = '1.2.21'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        //noinspection DifferentKotlinGradleVersion
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin2js'
+
+repositories {
+    jcenter()
+//    mavenLocal()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.webjars.bower:reveal.js:3.5.0"
+    compile 'org.webjars.bower:highlightjs:9.12.0'
+    compile "com.github.salomonbrys.revealkt:revealkt:1.0"
+}
+
+task assembleWeb(type: Sync) {
+
+    configurations.compile.each { File file ->
+        def extensions = [".html", ".js", ".css", ".jpg", ".png", ".eot", ".ttf", ".otf", ".woff"]
+
+        from(zipTree(file.absolutePath), {
+            includeEmptyDirs = false
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                !path.startsWith("META-INF/") && extensions.any { path.endsWith(it) }
+            }
+        })
+
+        from(zipTree(file.absolutePath), {
+            includeEmptyDirs = false
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.startsWith("META-INF/resources/") //&& extensions.any { path.endsWith(it) }
+            }
+
+            eachFile {
+                path sourcePath.substring("META-INF/resources/".length())
+            }
+        })
+    }
+
+    from compileKotlin2Js.destinationDir
+    into "${projectDir}/web/out/lib"
+
+    dependsOn classes
+}
+
+assemble.dependsOn assembleWeb
+
+task cleanWeb(type: Delete) {
+    delete "${projectDir}/web/out/"
+}
+
+clean.dependsOn cleanWeb
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${projectDir}/web/out/${project.name}.js"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMapEmbedSources = "always"
+}

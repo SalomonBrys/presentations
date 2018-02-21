@@ -1,0 +1,75 @@
+
+@keyframes flickerAnimation {
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
+}
+
+.flicker {
+    animation: flickerAnimation 1s infinite;
+}
+
+.hljs .fragment.highlight-current-blue.current-fragment, .hljs .fragment.highlight-current-blue.current-fragment * {
+    color: #1b91ff !important;
+    transition: all .2s ease;
+}
+
+.hljs .fragment.current-blue.current-fragment, .hljs .fragment.current-blue.current-fragment * {
+    color: #1b91ff !important;
+    transition: all .2s ease;
+}
+
+.reveal .slides section .fragment.fade-out-disappear {
+    opacity: 1;
+    visibility: inherit;
+}
+
+.reveal .slides section .fragment.fade-out-disappear.visible {
+    opacity: 0;
+    visibility: hidden;
+    font-size: 0;
+    display: inline-block;
+    height: 0px;
+}
+
+.reveal .slides section .fragment.fade-in-appear {
+  font-size: 0px;
+  display: inline-block;
+  height: 0px;
+}
+
+.reveal .slides section .fragment.fade-in-appear.visible {
+  font-size: inherit;
+  vertical-align: inherit;
+}
+
+@keyframes stampAnimation {
+    0%   { transform: scale(3, 3); }
+    100% { transform: scale(1, 1); }
+}
+
+.fragment.stamp {
+    display: inline-block;
+    transition: all .5s cubic-bezier(.7, .2, 1, .75) !important;
+}
+
+.fragment.stamp.visible {
+    animation: stampAnimation .5s cubic-bezier(.7, .2, 1, .75);
+}
+
+.error {
+    color: red !important;
+    font-weight: bold;
+}
+
+.warning {
+    color: orange !important;
+    font-weight: bold;
+}
+
+.reveal small.fileName {
+    display: block;
+    width: 90%;
+    margin: 0 auto -10px auto;
+    text-align: left;
+}
